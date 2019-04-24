@@ -14,12 +14,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Add this URL to your Twilio phone number configuration
 // for a call comes in.
-app.post('/incoming-call', function(req, res) {
+app.post('/incoming_call', function(req, res) {
   const gather = response.gather({
     input: 'speech dtmf',
     timeout: 3,
     numDigits: 1,
-    action: '/enqueue-call'
+    action: '/enqueue_call'
   });
   gather.say('Please select from the following departments');
   gather.say(
@@ -28,7 +28,7 @@ app.post('/incoming-call', function(req, res) {
   res.send(response.toString());
 });
 
-app.post('/enqueue-call', function(req, res) {
+app.post('/enqueue_call', function(req, res) {
   const response = new VoiceResponse();
   var Digits = req.body.Digits;
 
@@ -47,7 +47,7 @@ app.post('/enqueue-call', function(req, res) {
 
 // Add this URL to your Workflow under the
 // Assignment Callback section of the Console
-app.post('/assignment-callback', function(req, res) {
+app.post('/assignment_callback', function(req, res) {
   // add your Twilio phone number
   var dequeue = {
     instruction: 'dequeue',
