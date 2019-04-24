@@ -4,6 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const app = express();
+const http = require("http");
 const port = process.env.PORT || 3000;
 
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
@@ -27,7 +28,7 @@ app.post('/incoming-call', function(req, res) {
   res.send(response.toString());
 });
 
-app.use('/enqueue-call', function(req, res) {
+app.post('/enqueue-call', function(req, res) {
   const response = new VoiceResponse();
   var Digits = req.body.Digits;
 
@@ -37,18 +38,18 @@ app.use('/enqueue-call', function(req, res) {
     3: 'marketing'
   };
 
-  const enqueue = response.enqueue({ workflowSid: 'WWd6af12f07d1b01733fd089d2e2bff705' });
+  const enqueue = response.enqueue({ workflowSid: process.env.WORKFLOW_SID });
   enqueue.task({}, JSON.stringify({ department: product[Digits], selected_language: 'en' }));
 
   res.type('text/xml');
   res.send(response.toString());
 });
 
-app.use('/assignment-callback', function(req, res) {
+app.post('/assignment-callback', function(req, res) {
   // add your Twilio phone number
   var dequeue = {
     instruction: 'dequeue',
-    from: '+14152126996', // Your Twilio number.
+    from: process.env.TWILIO_NUMBER, // Your Twilio number.
   };
 
   res.type('application/json');
@@ -56,4 +57,6 @@ app.use('/assignment-callback', function(req, res) {
 });
 
 
-app.listen(port, () => console.log(`Server is up on port ${port}!`));
+http.createServer(app).listen(port, () => {
+  console.log(`Server is up on port ${port}!`)
+});
