@@ -45,6 +45,8 @@ app.post('/enqueue-call', function(req, res) {
   res.send(response.toString());
 });
 
+// Add this URL to your Workflow under the
+// Assignment Callback section of the Console
 app.post('/assignment-callback', function(req, res) {
   // add your Twilio phone number
   var dequeue = {
