@@ -1,6 +1,4 @@
-require('dotenv-safe').config({
-  allowEmptyValues: true
-});
+require('dotenv-safe').config();
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -13,6 +11,8 @@ const response = new VoiceResponse();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Add this URL to your Twilio phone number configuration
+// for a call comes in.
 app.post('/incoming-call', function(req, res) {
   const gather = response.gather({
     input: 'speech dtmf',
@@ -45,7 +45,7 @@ app.use('/enqueue-call', function(req, res) {
 });
 
 app.use('/assignment-callback', function(req, res) {
-  // add your Twilio phone number and WrapUp activity sid
+  // add your Twilio phone number
   var dequeue = {
     instruction: 'dequeue',
     from: '+14152126996', // Your Twilio number.
@@ -56,5 +56,4 @@ app.use('/assignment-callback', function(req, res) {
 });
 
 
-server.listen(port, () => {
-  console.log(`Server is up on port ${port}!`);
+app.listen(port, () => console.log(`Server is up on port ${port}!`));
