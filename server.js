@@ -9,7 +9,7 @@ const port = process.env.PORT || 3000;
 
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
 const response = new VoiceResponse();
-const client = require('twilio')(accountSid, authToken);
+const client = require('twilio')(process.env.ACCOUNT_SID, process.env.AUTH_TOKEN);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -53,13 +53,14 @@ app.post('/assignment_callback', function(req, res) {
   var dequeue = {
     instruction: 'dequeue',
     from: process.env.TWILIO_NUMBER, // Your Twilio number.
-    status_callback_url: ngrok_url + "/status_callback"
+    status_callback_url: '/status_callback'
   };
 
   res.type('application/json');
   res.send(dequeue);
 });
 
+// Complete task.
 app.post("/status_callback", function(req, res){
   const url = require("url");
   const querystring = url.parse(req.url, true);
